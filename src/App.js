@@ -34,8 +34,10 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
+import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
+import Box from "@material-ui/core/Box";
+import Switch from "@material-ui/core/Switch";
 const drawerWidth = 240;
 const useStyles = makeStyles(theme => ({
   root: {
@@ -128,9 +130,6 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     margin: theme.spacing(1)
-  },
-  input: {
-    display: "none"
   }
 }));
 
@@ -178,15 +177,32 @@ const ExpansionPanelDetails = withStyles(theme => ({
 function valuetext(value) {
   return { value };
 }
-function handleClick() {
-  console.log("123")
-  console.log("456")
-  return 123;
+
+class Toggle extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isToggleOn: true,
+      dispaly: "block"
+    };
+
+    // 这个绑定是必要的，使`this`在回调中起作用
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick5() {
+    this.setState(prevState => ({
+      isToggleOn: !prevState.isToggleOn,
+      display: prevState.isToggleOn ? "none" : "block"
+    }));
+  }
 }
+// function testt() {
+//   style.display=style.display==''?'none':''
+//   return ;
+// }
 
 export default function DashBoards() {
-  handleClick();
-  {}
   const classes = useStyles();
   const [values, setValues] = React.useState({
     age: "",
@@ -210,12 +226,13 @@ export default function DashBoards() {
   const handleChange2 = panel => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
   };
-  const [state, setState] = React.useState({
-  });
+  const [state, setState] = React.useState({});
 
   const handleChange3 = name => event => {
     setState({ ...state, [name]: event.target.checked });
-    
+  };
+  const handleChange4 = name => event => {
+    setState({ ...state, [name]: event.target.checked });
   };
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -226,6 +243,39 @@ export default function DashBoards() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  const AntSwitch = withStyles(theme => ({
+    root: {
+      width: 28,
+      height: 16,
+      padding: 0,
+      display: "flex"
+    },
+    switchBase: {
+      padding: 2,
+      color: theme.palette.grey[500],
+      "&$checked": {
+        transform: "translateX(12px)",
+        color: theme.palette.common.white,
+        "& + $track": {
+          opacity: 1,
+          backgroundColor: theme.palette.primary.main,
+          borderColor: theme.palette.primary.main
+        }
+      }
+    },
+    thumb: {
+      width: 12,
+      height: 12,
+      boxShadow: "none"
+    },
+    track: {
+      border: `1px solid ${theme.palette.grey[500]}`,
+      borderRadius: 16 / 2,
+      opacity: 1,
+      backgroundColor: theme.palette.common.white
+    },
+    checked: {}
+  }))(Switch);
 
   return (
     <div className={classes.root}>
@@ -420,69 +470,53 @@ export default function DashBoards() {
                   </Select>
                 </FormControl>
                 <FormControl component="fieldset">
-                  <FormLabel component="legend">近/遠月</FormLabel>
-                  <RadioGroup
+                  <FormLabel component="legend">買/賣權</FormLabel>
+                  <FormGroup
                     aria-label="position"
-                    value={value.name}
-                    onChange={handleChange1}
+                    name="position"
+                    value={value}
+                    onChange={handleChange3}
                     row
-                    inputProps={{
-                      name: "ending_month",
-                      id: "age-simple"
-                    }}
                   >
                     <FormControlLabel
-                      value="near"
-                      control={<Radio color="primary" />}
-                      label="近月"
-                      labelPlacement="top"
-                    />
-                    <FormControlLabel
-                      value="far"
-                      control={<Radio color="primary" />}
-                      label="遠月"
-                      labelPlacement="top"
-                    />
-                    <FormControlLabel
-                      value="near+far"
-                      control={<Radio color="primary" />}
-                      label="近月+遠月"
-                      labelPlacement="top"
-                    />
-                  </RadioGroup>
-                </FormControl>
-                <FormControl component="fieldset">
-                  <FormLabel component="legend">買權/賣權</FormLabel>
-                  <RadioGroup
-                    aria-label="position"
-                    value={value.name}
-                    onChange={handleChange1}
-                    row
-                    inputProps={{
-                      name: "call_put",
-                      id: "age-simple"
-                    }}
-                  >
-                    <FormControlLabel
-                      value="call"
-                      control={<Radio color="primary" />}
+                      value="start"
+                      control={<Checkbox color="primary" />}
                       label="買權"
-                      labelPlacement="top"
+                      labelPlacement="start"
                     />
                     <FormControlLabel
-                      value="put"
-                      control={<Radio color="primary" />}
+                      value="start"
+                      control={<Checkbox color="primary" />}
                       label="賣權"
-                      labelPlacement="top"
+                      labelPlacement="start"
+                    />
+                  </FormGroup>
+                </FormControl>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <FormControl component="fieldset">
+                  <FormLabel component="legend">近/遠月</FormLabel>
+                  <FormGroup
+                    aria-label="position"
+                    name="position"
+                    value={value}
+                    onChange={handleChange3}
+                    row
+                  >
+                    <FormControlLabel
+                      value="start"
+                      control={<Checkbox color="primary" />}
+                      label="近月"
+                      labelPlacement="start"
                     />
                     <FormControlLabel
-                      value="call+put"
-                      control={<Radio color="primary" />}
-                      label="買權+賣權"
-                      labelPlacement="top"
+                      value="start"
+                      control={<Checkbox color="primary" />}
+                      label="遠月"
+                      labelPlacement="start"
                     />
-                  </RadioGroup>
+                  </FormGroup>
                 </FormControl>
+                &nbsp;&nbsp;&nbsp;&nbsp;
                 <TextField
                   required
                   id="standard-required"
@@ -493,29 +527,25 @@ export default function DashBoards() {
                 />
                 <FormControl component="fieldset">
                   <FormLabel component="legend">是否真實計算保證金</FormLabel>
-                  <RadioGroup
-                    aria-label="position"
-                    value={value.name}
-                    onChange={handleChange1}
-                    row
-                    inputProps={{
-                      name: "real_bail",
-                      id: "age-simple"
-                    }}
-                  >
-                    <FormControlLabel
-                      value="yes"
-                      control={<Radio color="primary" />}
-                      label="是"
-                      labelPlacement="top"
-                    />
-                    <FormControlLabel
-                      value="nope"
-                      control={<Radio color="primary" />}
-                      label="否"
-                      labelPlacement="top"
-                    />
-                  </RadioGroup>
+                  <br />
+                  <Typography component="div">
+                    <Grid
+                      component="label"
+                      container
+                      alignItems="center"
+                      spacing={1}
+                    >
+                      <Grid item>是</Grid>
+                      <Grid item>
+                        <AntSwitch
+                          checked={state.bail}
+                          onChange={handleChange4("bail")}
+                          value="bail"
+                        />
+                      </Grid>
+                      <Grid item>否</Grid>
+                    </Grid>
+                  </Typography>
                 </FormControl>
               </form>
             </Typography>
@@ -541,7 +571,7 @@ export default function DashBoards() {
                 defaultValue="20"
                 className={classes.textField}
                 margin="normal"
-              /> 
+              />
               <TextField
                 required
                 id="standard-required"
@@ -621,24 +651,63 @@ export default function DashBoards() {
                       checked={state.checkedA}
                       onChange={handleChange3("checkedA")}
                       value="checkedA"
-                      id="VIX"
                     />
                   }
-                  onClick={ () => {document.getElementById("VIX").innerHTML='sadas';}}
                   label="VIX"
-                  display="none"
                 />
+                <Box
+                  component="div"
+                  id="VIX"
+                  display=""
+                  p={1}
+                  m={1}
+                  bgcolor="background.paper"
+                >
+                  VIX指數大於時<input></input> 交易
+                  <Switch
+                    defaultChecked
+                    value="checkedF"
+                    color="default"
+                    inputProps={{ "aria-label": "checkbox with default color" }}
+                  />
+                  不交易
+                </Box>
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={state.checkedB}
-                      onChange={handleChange3("checkedB")}
-                      value="checkedB"
+                      checked={state.vix}
+                      onChange={handleChange3("vix")}
+                      value="vix"
                       color="primary"
                     />
                   }
                   label="EMA"
                 />
+                <Box
+                  component="div"
+                  id="VIX"
+                  display=""
+                  p={1}
+                  m={1}
+                  bgcolor="background.paper"
+                >
+                  加權指數之 收盤價
+                  <Switch
+                    defaultChecked
+                    value="checkedF"
+                    color="default"
+                    inputProps={{ "aria-label": "checkbox with default color" }}
+                  />
+                  最高/最低價 突破<input></input>
+                  日線時 交易
+                  <Switch
+                    defaultChecked
+                    value="checkedF"
+                    color="default"
+                    inputProps={{ "aria-label": "checkbox with default color" }}
+                  />
+                  不交易
+                </Box>
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -650,6 +719,15 @@ export default function DashBoards() {
                   }
                   label="Spread"
                 />
+                <Box
+                  component="div"
+                  display="inline"
+                  p={1}
+                  m={1}
+                  bgcolor="background.paper"
+                >
+                  以<input></input>%之權利金當作保護部位
+                </Box>
               </FormGroup>
             </Typography>
           </ExpansionPanelDetails>
@@ -660,10 +738,31 @@ export default function DashBoards() {
             color="primary"
             className={classes.button}
             style={{ justifyContent: "center" }}
+            // onClick={() => this.testt(item.test1)}
           >
             Submit
           </Button>
         </Grid>
+        <Paper className={classes.root}>
+          <Typography variant="h5" component="h3">
+            This is a sheet of paper.
+          </Typography>
+          <div id="test1">
+            <Typography component="div">
+              Paper can be used to build surface or other elements for your
+              application.
+            </Typography>
+          </div>
+          <div>
+            <button onClick={Toggle.handleClick5}>
+              {this.state.isToggleOn ? "ON" : "OFF"}
+            </button>
+            <div
+              className="m-test"
+              style={{ display: this.state.display }}
+            ></div>
+          </div>
+        </Paper>
       </main>
     </div>
   );
