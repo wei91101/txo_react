@@ -5,14 +5,10 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormLabel from "@material-ui/core/FormLabel";
 import TextField from "@material-ui/core/TextField";
@@ -32,12 +28,12 @@ import Divider from "@material-ui/core/Divider";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Switch from "@material-ui/core/Switch";
+
 const drawerWidth = 240;
 const useStyles = makeStyles(theme => ({
   root: {
@@ -173,30 +169,6 @@ const ExpansionPanelDetails = withStyles(theme => ({
     padding: theme.spacing(2)
   }
 }))(MuiExpansionPanelDetails);
-
-function valuetext(value) {
-  return { value };
-}
-
-class Toggle extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isToggleOn: true,
-      dispaly: "block"
-    };
-
-    // 这个绑定是必要的，使`this`在回调中起作用
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  handleClick5() {
-    this.setState(prevState => ({
-      isToggleOn: !prevState.isToggleOn,
-      display: prevState.isToggleOn ? "none" : "block"
-    }));
-  }
-}
 // function testt() {
 //   style.display=style.display==''?'none':''
 //   return ;
@@ -209,9 +181,6 @@ export default function DashBoards() {
     name: "hai"
   });
 
-  const inputLabel = React.useRef(null);
-  const [labelWidth, setLabelWidth] = React.useState(0);
-
   const handleChange = event => {
     setValues(oldValues => ({
       ...oldValues,
@@ -219,9 +188,6 @@ export default function DashBoards() {
     }));
   };
   const [value, setValue] = React.useState("female");
-  const handleChange1 = event => {
-    setValue(event.target.value);
-  };
   const [expanded, setExpanded] = React.useState("panel1");
   const handleChange2 = panel => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
@@ -229,9 +195,6 @@ export default function DashBoards() {
   const [state, setState] = React.useState({});
 
   const handleChange3 = name => event => {
-    setState({ ...state, [name]: event.target.checked });
-  };
-  const handleChange4 = name => event => {
     setState({ ...state, [name]: event.target.checked });
   };
   const theme = useTheme();
@@ -276,6 +239,23 @@ export default function DashBoards() {
     },
     checked: {}
   }))(Switch);
+
+  const [count, setCount] = React.useState("none");
+  const [count1, setCount1] = React.useState("none");
+  const [count2, setCount2] = React.useState("none");
+
+  function handleClick5() {
+    if (count === "none") return setCount("block");
+    if (count === "block") return setCount("none");
+  }
+  function handleClick6() {
+    if (count1 === "none") return setCount1("block");
+    if (count1 === "block") return setCount1("none");
+  }
+  function handleClick7() {
+    if (count2 === "none") return setCount2("block");
+    if (count2 === "block") return setCount2("none");
+  }
 
   return (
     <div className={classes.root}>
@@ -535,15 +515,15 @@ export default function DashBoards() {
                       alignItems="center"
                       spacing={1}
                     >
-                      <Grid item>是</Grid>
+                      <Grid item>否</Grid>
                       <Grid item>
                         <AntSwitch
                           checked={state.bail}
-                          onChange={handleChange4("bail")}
+                          onChange={handleChange3("bail")}
                           value="bail"
                         />
                       </Grid>
-                      <Grid item>否</Grid>
+                      <Grid item>是</Grid>
                     </Grid>
                   </Typography>
                 </FormControl>
@@ -648,9 +628,11 @@ export default function DashBoards() {
                 <FormControlLabel
                   control={
                     <Checkbox
+                      color="primary"
                       checked={state.checkedA}
                       onChange={handleChange3("checkedA")}
                       value="checkedA"
+                      onClick={handleClick5}
                     />
                   }
                   label="VIX"
@@ -662,6 +644,7 @@ export default function DashBoards() {
                   p={1}
                   m={1}
                   bgcolor="background.paper"
+                  style={{ display: count }}
                 >
                   VIX指數大於時<input></input> 交易
                   <Switch
@@ -679,6 +662,7 @@ export default function DashBoards() {
                       onChange={handleChange3("vix")}
                       value="vix"
                       color="primary"
+                      onClick={handleClick6}
                     />
                   }
                   label="EMA"
@@ -690,6 +674,7 @@ export default function DashBoards() {
                   p={1}
                   m={1}
                   bgcolor="background.paper"
+                  style={{ display: count1 }}
                 >
                   加權指數之 收盤價
                   <Switch
@@ -718,6 +703,7 @@ export default function DashBoards() {
                     />
                   }
                   label="Spread"
+                  onClick={handleClick7}
                 />
                 <Box
                   component="div"
@@ -725,6 +711,7 @@ export default function DashBoards() {
                   p={1}
                   m={1}
                   bgcolor="background.paper"
+                  style={{ display: count2 }}
                 >
                   以<input></input>%之權利金當作保護部位
                 </Box>
@@ -738,31 +725,21 @@ export default function DashBoards() {
             color="primary"
             className={classes.button}
             style={{ justifyContent: "center" }}
-            // onClick={() => this.testt(item.test1)}
           >
             Submit
           </Button>
         </Grid>
-        <Paper className={classes.root}>
+        {/* <Paper className={classes.root}>
           <Typography variant="h5" component="h3">
             This is a sheet of paper.
           </Typography>
           <div id="test1">
-            <Typography component="div">
+            <Typography component="div" >
               Paper can be used to build surface or other elements for your
               application.
             </Typography>
           </div>
-          <div>
-            <button onClick={Toggle.handleClick5}>
-              {this.state.isToggleOn ? "ON" : "OFF"}
-            </button>
-            <div
-              className="m-test"
-              style={{ display: this.state.display }}
-            ></div>
-          </div>
-        </Paper>
+        </Paper> */}
       </main>
     </div>
   );
